@@ -19,6 +19,7 @@ class Country extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.deleteCountry = this.deleteCountry.bind(this);
   }
 
   countryList =(data)=>{
@@ -41,8 +42,21 @@ class Country extends React.Component {
     event.preventDefault();
   }
 
+  deleteCountry() {
+    const url = "http://10.25.138.118:8080/countries/" + this.state.value;
+    const requestOptions = {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    }
+    fetch(url, requestOptions)
+      .then(res => res.json())
+      .catch(error => {
+        this.setState({error});
+      })
+  }
+
   componentDidMount() {
-    fetch("http://127.0.0.1:8080/countries")
+    fetch("http://10.25.138.118:8080/countries")
       .then(res => res.json())
       .then(data=>{
         localStorage.setItem('countries', JSON.stringify(data));
@@ -80,8 +94,8 @@ class Country extends React.Component {
           </div>
           <div class="form-group row">
             <div class="col-sm-10">
-              <button type="submit" value="Submit" className="btn btn-primary btn-md">Submit</button>
-            </div>
+              <input className="btn btn-danger" type='button' value='Delete' onClick={this.deleteCountry} />
+	    </div>
           </div>
         </form>
       </div>
